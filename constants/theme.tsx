@@ -1,0 +1,73 @@
+export const theme = {
+  colors: {
+    background: '#0D1117',
+    surface: '#161B22',
+    surfaceLight: '#21262D',
+    surfaceBorder: '#30363D',
+    primary: '#58A6FF',
+    primaryDark: '#1F6FEB',
+    success: '#3FB950',
+    warning: '#D29922',
+    error: '#F85149',
+    text: '#E6EDF3',
+    textSecondary: '#8B949E',
+    textMuted: '#6E7681',
+    accent: '#A371F7',
+    accentTeal: '#2EA043',
+    accentOrange: '#DB6D28',
+    codeBackground: '#0D1117',
+    codeBorder: '#30363D',
+  },
+  spacing: {
+    xs: 4,
+    sm: 8,
+    md: 16,
+    lg: 24,
+    xl: 32,
+    xxl: 48,
+  },
+  borderRadius: {
+    sm: 6,
+    md: 8,
+    lg: 12,
+    xl: 16,
+    full: 999,
+  },
+  fontSize: {
+    xs: 11,
+    sm: 13,
+    md: 15,
+    lg: 17,
+    xl: 20,
+    xxl: 24,
+    hero: 32,
+  },
+  fontWeight: {
+    normal: '400' as const,
+    medium: '500' as const,
+    semibold: '600' as const,
+    bold: '700' as const,
+  },
+};
+
+export const difficultyColors = {
+  beginner: '#3FB950',
+  intermediate: '#D29922',
+  advanced: '#F85149',
+  scenario: '#A371F7',
+  troubleshooting: '#58A6FF',
+  architecture: '#DB6D28',
+};
+
+export const moduleColors: Record<string, string> = {
+  'cloud-fundamentals': '#58A6FF',
+  'aws': '#FF9900',
+  'azure': '#0078D4',
+  'linux': '#FCC624',
+  'networking': '#00B4D8',
+  'docker': '#2496ED',
+  'kubernetes': '#326CE5',
+  'terraform': '#7B42BC',
+  'monitoring': '#E6522C',
+  'security': '#D63384',
+};

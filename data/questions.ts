@@ -1,0 +1,860 @@
+import { Question } from '@/types';
+
+export const questionsData: Question[] = [
+  // Cloud Fundamentals - Beginner
+  {
+    id: 'cf-b-1',
+    moduleId: 'cloud-fundamentals',
+    difficulty: 'beginner',
+    question: 'What is Cloud Computing and why do companies adopt it?',
+    explanation: 'Cloud computing is on-demand delivery of IT resources over the internet with pay-as-you-go pricing. Instead of buying and maintaining physical servers, you rent compute power, storage, and databases from a cloud provider like AWS, Azure, or GCP. Companies adopt it primarily for cost optimization, scalability, and faster time-to-market.',
+    example: 'A startup launches an e-commerce site using AWS EC2 instances. During Black Friday, they scale from 2 to 50 servers automatically, then scale back down—paying only for what they used.',
+    productionUseCase: 'Netflix uses AWS to handle 200+ million subscribers globally. They can spin up thousands of servers during peak hours and release them during off-peak, saving millions in infrastructure costs.',
+    commonMistakes: [
+      'Saying "cloud is just someone else\'s computer" without understanding the managed services aspect',
+      'Confusing cloud hosting with traditional web hosting',
+      'Not mentioning the shared responsibility model',
+    ],
+    interviewerExpects: [
+      'Understanding of on-demand and pay-as-you-go concepts',
+      'Knowledge of key benefits: scalability, cost, agility',
+      'Awareness of major cloud providers',
+    ],
+    followUpQuestions: [
+      'What are the different cloud service models?',
+      'Can you explain public vs private vs hybrid cloud?',
+      'What is the shared responsibility model?',
+    ],
+    keywords: ['on-demand', 'pay-as-you-go', 'scalability', 'elasticity', 'IaaS', 'PaaS', 'SaaS'],
+  },
+  {
+    id: 'cf-b-2',
+    moduleId: 'cloud-fundamentals',
+    difficulty: 'beginner',
+    question: 'Explain IaaS, PaaS, and SaaS with examples.',
+    explanation: 'These are the three main cloud service models representing different levels of abstraction. IaaS (Infrastructure as a Service) gives you raw compute, storage, and networking—you manage everything above the hypervisor. PaaS (Platform as a Service) provides a platform to deploy applications without managing underlying infrastructure. SaaS (Software as a Service) delivers complete applications over the internet.',
+    example: 'IaaS: AWS EC2 (you get a virtual server, install OS, configure everything). PaaS: Heroku (push code, platform handles deployment). SaaS: Gmail (just use the application, zero management).',
+    productionUseCase: 'A company might use IaaS (EC2) for legacy applications requiring specific configurations, PaaS (Elastic Beanstalk) for web applications where developers want to focus on code, and SaaS (Salesforce) for CRM without any infrastructure management.',
+    commonMistakes: [
+      'Mixing up PaaS and IaaS responsibilities',
+      'Not understanding what "managed" means at each level',
+      'Forgetting serverless fits into PaaS category',
+    ],
+    interviewerExpects: [
+      'Clear differentiation between all three models',
+      'Real-world examples for each',
+      'Understanding of management responsibility at each level',
+    ],
+    followUpQuestions: [
+      'Where does serverless computing fit?',
+      'What would you choose for a new microservices project?',
+      'How does container-as-a-service (CaaS) fit in?',
+    ],
+    keywords: ['IaaS', 'PaaS', 'SaaS', 'managed services', 'abstraction layers', 'shared responsibility'],
+  },
+  {
+    id: 'cf-b-3',
+    moduleId: 'cloud-fundamentals',
+    difficulty: 'beginner',
+    question: 'What is the difference between vertical and horizontal scaling?',
+    explanation: 'Vertical scaling (scaling up) means adding more power to existing machines—more CPU, RAM, or storage. Horizontal scaling (scaling out) means adding more machines to distribute the load. Horizontal scaling is preferred in cloud environments because it provides better fault tolerance and can theoretically scale infinitely.',
+    example: 'Vertical: Upgrading a database server from 16GB to 64GB RAM. Horizontal: Adding 3 more web servers behind a load balancer to handle increased traffic.',
+    productionUseCase: 'Instagram scaled horizontally by adding more application servers behind load balancers. However, for their PostgreSQL database, they initially scaled vertically before implementing sharding for horizontal distribution.',
+    commonMistakes: [
+      'Thinking vertical scaling has no limits (hardware has limits)',
+      'Not considering stateful vs stateless when discussing horizontal scaling',
+      'Forgetting that horizontal scaling requires application design changes',
+    ],
+    interviewerExpects: [
+      'Understanding trade-offs of each approach',
+      'Knowing when to use which strategy',
+      'Awareness of stateless application requirements for horizontal scaling',
+    ],
+    followUpQuestions: [
+      'How do you handle session state in horizontal scaling?',
+      'What is auto-scaling?',
+      'How would you scale a database horizontally?',
+    ],
+    keywords: ['scale up', 'scale out', 'horizontal scaling', 'vertical scaling', 'auto-scaling', 'elasticity'],
+  },
+
+  // Cloud Fundamentals - Intermediate
+  {
+    id: 'cf-i-1',
+    moduleId: 'cloud-fundamentals',
+    difficulty: 'intermediate',
+    question: 'What is the shared responsibility model in cloud computing?',
+    explanation: 'The shared responsibility model defines which security tasks are handled by the cloud provider and which are your responsibility. The provider secures the infrastructure (physical security, hypervisor, network infrastructure), while you secure what you put IN the cloud (data, applications, IAM, encryption, network configuration). The division varies by service model.',
+    example: 'In AWS EC2: AWS secures the physical data center and hypervisor. You secure the OS, applications, security groups, and data encryption. In AWS Lambda: AWS handles more (runtime patching), you handle code security and IAM permissions.',
+    productionUseCase: 'Capital One\'s 2019 breach happened because of a misconfigured WAF (Web Application Firewall)—their responsibility under the shared model. AWS infrastructure wasn\'t compromised; the customer\'s configuration was.',
+    commonMistakes: [
+      'Assuming the cloud provider handles all security',
+      'Not understanding responsibility shifts between IaaS, PaaS, and SaaS',
+      'Neglecting IAM and encryption as customer responsibilities',
+    ],
+    interviewerExpects: [
+      'Clear understanding of provider vs customer responsibilities',
+      'Knowledge of how responsibilities shift across service models',
+      'Real-world security awareness',
+    ],
+    followUpQuestions: [
+      'How does this model change between EC2 and Lambda?',
+      'What security controls are always your responsibility?',
+      'How do you ensure compliance in a shared model?',
+    ],
+    keywords: ['shared responsibility', 'security', 'compliance', 'provider responsibility', 'customer responsibility'],
+  },
+  {
+    id: 'cf-i-2',
+    moduleId: 'cloud-fundamentals',
+    difficulty: 'intermediate',
+    question: 'Explain high availability and disaster recovery in cloud context.',
+    explanation: 'High Availability (HA) is about minimizing downtime through redundancy—keeping systems running during component failures. Disaster Recovery (DR) is about recovering from catastrophic failures—having a plan to restore operations after a major outage. HA prevents small failures from causing downtime; DR handles worst-case scenarios.',
+    example: 'HA: Running web servers across multiple Availability Zones with a load balancer—if one AZ fails, traffic routes to others. DR: Backing up databases to a different region and having runbooks to failover if the primary region goes down.',
+    productionUseCase: 'Slack maintains HA with multi-AZ deployments for their chat service. For DR, they replicate critical data to different regions and have documented procedures to switch DNS and restore service within their RTO (Recovery Time Objective).',
+    commonMistakes: [
+      'Confusing HA with DR—they solve different problems',
+      'Thinking multi-AZ automatically means you have DR',
+      'Not defining RTO and RPO for DR planning',
+    ],
+    interviewerExpects: [
+      'Clear distinction between HA and DR',
+      'Knowledge of RTO (Recovery Time Objective) and RPO (Recovery Point Objective)',
+      'Understanding of multi-AZ vs multi-region strategies',
+    ],
+    followUpQuestions: [
+      'What is the difference between RTO and RPO?',
+      'How would you design a DR strategy for a critical application?',
+      'What is a pilot light DR strategy?',
+    ],
+    keywords: ['high availability', 'disaster recovery', 'RTO', 'RPO', 'multi-AZ', 'multi-region', 'redundancy'],
+  },
+
+  // Cloud Fundamentals - Advanced
+  {
+    id: 'cf-a-1',
+    moduleId: 'cloud-fundamentals',
+    difficulty: 'advanced',
+    question: 'How would you design a multi-region active-active architecture?',
+    explanation: 'Active-active multi-region means running your application simultaneously in multiple regions, all serving live traffic. This requires: global load balancing (DNS or CDN-based), data replication with conflict resolution, stateless application tier, and careful handling of data consistency. It\'s complex but provides the lowest possible latency and highest availability.',
+    example: 'Users in EU hit eu-west-1, users in US hit us-east-1. Both regions have identical infrastructure. Data syncs bidirectionally with conflict resolution based on timestamps or vector clocks.',
+    productionUseCase: 'CockroachDB implements active-active across regions using consensus protocols. Shopify runs active-active for their storefront, using edge caching and regional databases with careful partition strategies to minimize cross-region data access.',
+    commonMistakes: [
+      'Underestimating data consistency challenges',
+      'Not considering CAP theorem implications',
+      'Forgetting about the cost of cross-region data transfer',
+      'Treating all data the same—some data can be regional, some must be global',
+    ],
+    interviewerExpects: [
+      'Deep understanding of distributed systems challenges',
+      'Knowledge of consistency models (eventual, strong, causal)',
+      'Practical approaches to conflict resolution',
+      'Cost and complexity awareness',
+    ],
+    followUpQuestions: [
+      'How would you handle data conflicts in active-active?',
+      'What consistency model would you choose and why?',
+      'How does CAP theorem affect your design?',
+    ],
+    keywords: ['active-active', 'multi-region', 'global load balancing', 'data replication', 'conflict resolution', 'CAP theorem'],
+  },
+
+  // Cloud Fundamentals - Scenario
+  {
+    id: 'cf-s-1',
+    moduleId: 'cloud-fundamentals',
+    difficulty: 'scenario',
+    question: 'Your application is experiencing sudden traffic spikes that auto-scaling cannot handle fast enough. What would you do?',
+    explanation: 'This is a classic "scaling lag" problem. Auto-scaling takes time—launching instances, health checks, registration. Solutions include: predictive scaling based on patterns, over-provisioning baseline capacity, implementing caching layers, using CDN for static content, queuing incoming requests, or using serverless for spike absorption.',
+    example: 'Implement a multi-layer approach: CDN absorbs 60% of requests, Redis cache handles 30% of remaining, pre-warm additional instances before known peak times, use Lambda for overflow processing.',
+    productionUseCase: 'Twitter handles traffic spikes during major events by pre-scaling before expected peaks (Super Bowl, elections), using aggressive caching, and having "load shedding" mechanisms that gracefully degrade non-critical features under extreme load.',
+    commonMistakes: [
+      'Only relying on reactive auto-scaling',
+      'Not implementing caching at multiple layers',
+      'Forgetting about database as the bottleneck',
+      'Not having a graceful degradation strategy',
+    ],
+    interviewerExpects: [
+      'Multi-layered thinking about scalability',
+      'Understanding of caching strategies',
+      'Knowledge of predictive vs reactive scaling',
+      'Practical trade-off analysis',
+    ],
+    followUpQuestions: [
+      'How would you implement predictive scaling?',
+      'What metrics would you use to trigger scaling?',
+      'How would you handle database scaling in this scenario?',
+    ],
+    keywords: ['auto-scaling', 'caching', 'CDN', 'predictive scaling', 'load shedding', 'graceful degradation'],
+  },
+
+  // Docker - Beginner
+  {
+    id: 'docker-b-1',
+    moduleId: 'docker',
+    difficulty: 'beginner',
+    question: 'What is Docker and how is it different from virtual machines?',
+    explanation: 'Docker is a containerization platform that packages applications with their dependencies into lightweight, portable containers. Unlike VMs that virtualize hardware and run full operating systems, containers share the host OS kernel and isolate only the application layer. This makes containers faster to start (seconds vs minutes), more efficient (MB vs GB), and more portable.',
+    example: 'A VM runs: Hardware → Hypervisor → Guest OS → App. A container runs: Hardware → Host OS → Docker Engine → App. The container skips the entire Guest OS layer.',
+    productionUseCase: 'Spotify migrated from VMs to containers and reduced their deployment time from hours to seconds. They went from deploying 2-3 times per week to hundreds of deployments per day.',
+    commonMistakes: [
+      'Saying containers are "lightweight VMs"—they\'re fundamentally different',
+      'Not understanding that containers share the host kernel',
+      'Thinking containers provide the same isolation as VMs',
+    ],
+    interviewerExpects: [
+      'Understanding of containerization vs virtualization',
+      'Knowledge of resource efficiency differences',
+      'Awareness of isolation differences',
+    ],
+    followUpQuestions: [
+      'When would you choose VMs over containers?',
+      'What is a container runtime?',
+      'How do containers achieve isolation?',
+    ],
+    keywords: ['containerization', 'Docker', 'VM', 'kernel sharing', 'isolation', 'portability', 'Docker Engine'],
+  },
+  {
+    id: 'docker-b-2',
+    moduleId: 'docker',
+    difficulty: 'beginner',
+    question: 'Explain the difference between Docker image and Docker container.',
+    explanation: 'A Docker image is a read-only template containing application code, runtime, libraries, and dependencies—it\'s like a class in OOP. A container is a running instance of an image—it\'s like an object created from that class. You can run multiple containers from the same image, each isolated from others.',
+    example: 'Image: A blueprint for a Node.js app (node:18 base, your code, npm packages). Container: A running instance serving traffic on port 3000. You might run 5 containers from the same image for load balancing.',
+    productionUseCase: 'In Kubernetes, a Deployment might specify running 10 replicas of your application—that\'s 10 containers, all created from the same image stored in a registry like Docker Hub or ECR.',
+    commonMistakes: [
+      'Using image and container interchangeably',
+      'Not understanding images are immutable',
+      'Forgetting that container changes don\'t affect the image',
+    ],
+    interviewerExpects: [
+      'Clear distinction between image and container',
+      'Understanding of immutability of images',
+      'Knowledge of how images are built and stored',
+    ],
+    followUpQuestions: [
+      'Where are Docker images stored?',
+      'What happens to container data when it stops?',
+      'What are image layers?',
+    ],
+    keywords: ['Docker image', 'container', 'immutable', 'image layers', 'container registry', 'instance'],
+  },
+  {
+    id: 'docker-b-3',
+    moduleId: 'docker',
+    difficulty: 'beginner',
+    question: 'What is a Dockerfile and what are its main instructions?',
+    explanation: 'A Dockerfile is a text file containing instructions to build a Docker image. Each instruction creates a layer in the image. Key instructions: FROM (base image), RUN (execute commands), COPY/ADD (add files), WORKDIR (set working directory), ENV (environment variables), EXPOSE (document ports), CMD/ENTRYPOINT (default command).',
+    example: 'FROM node:18-alpine\nWORKDIR /app\nCOPY package*.json ./\nRUN npm ci\nCOPY . .\nEXPOSE 3000\nCMD ["node", "server.js"]',
+    productionUseCase: 'Every CI/CD pipeline builds images from Dockerfiles. The instruction order matters—placing frequently changing instructions (like COPY code) at the end maximizes layer caching, significantly speeding up builds.',
+    commonMistakes: [
+      'Not understanding layer caching and instruction order',
+      'Confusing CMD and ENTRYPOINT',
+      'Using ADD when COPY is sufficient',
+      'Not using .dockerignore',
+    ],
+    interviewerExpects: [
+      'Knowledge of common Dockerfile instructions',
+      'Understanding of layer caching',
+      'Best practices for efficient Dockerfiles',
+    ],
+    followUpQuestions: [
+      'What\'s the difference between CMD and ENTRYPOINT?',
+      'How does layer caching work?',
+      'What is a multi-stage build?',
+    ],
+    keywords: ['Dockerfile', 'FROM', 'RUN', 'COPY', 'CMD', 'ENTRYPOINT', 'layer caching', 'image build'],
+  },
+
+  // Docker - Intermediate
+  {
+    id: 'docker-i-1',
+    moduleId: 'docker',
+    difficulty: 'intermediate',
+    question: 'Explain Docker networking modes and when to use each.',
+    explanation: 'Docker provides several network drivers: Bridge (default, isolated network on host), Host (container shares host network stack), None (no networking), Overlay (multi-host networking for Swarm/Kubernetes), Macvlan (assigns MAC address, appears as physical device). Bridge is most common for single-host; Overlay for distributed systems.',
+    example: 'Bridge: Web app containers on same host communicate via container names. Host: High-performance app needing to bind to host ports directly. Overlay: Microservices across multiple Docker hosts in Swarm.',
+    productionUseCase: 'In production Kubernetes, the CNI (Container Network Interface) uses overlay networking to allow pods across different nodes to communicate. Services like Calico or Weave implement this, often using VXLAN tunneling.',
+    commonMistakes: [
+      'Using host networking in production without understanding security implications',
+      'Not creating custom bridge networks (default bridge lacks DNS)',
+      'Confusing Docker networking with Kubernetes networking',
+    ],
+    interviewerExpects: [
+      'Understanding of different network modes',
+      'Knowledge of when to use each mode',
+      'Awareness of DNS resolution in Docker networks',
+    ],
+    followUpQuestions: [
+      'How does DNS work in Docker networks?',
+      'What is the difference between default bridge and user-defined bridge?',
+      'How would you expose a container to the internet?',
+    ],
+    keywords: ['bridge network', 'host network', 'overlay network', 'Docker networking', 'CNI', 'container DNS'],
+  },
+  {
+    id: 'docker-i-2',
+    moduleId: 'docker',
+    difficulty: 'intermediate',
+    question: 'What is a multi-stage Docker build and why is it important?',
+    explanation: 'Multi-stage builds use multiple FROM statements in a Dockerfile, allowing you to use one stage for building (with all build tools) and another for the final image (only runtime). This dramatically reduces final image size by excluding build dependencies, compilers, and source code from the production image.',
+    example: '# Build stage\nFROM node:18 AS builder\nWORKDIR /app\nCOPY . .\nRUN npm ci && npm run build\n\n# Production stage\nFROM node:18-alpine\nCOPY --from=builder /app/dist ./dist\nCMD ["node", "dist/server.js"]',
+    productionUseCase: 'A Go application\'s build image might be 1GB+ (includes Go compiler, source). Using multi-stage, the final image can be under 10MB (just the static binary). This reduces registry storage, speeds up deployments, and minimizes attack surface.',
+    commonMistakes: [
+      'Not using multi-stage for compiled languages',
+      'Including build tools in production images',
+      'Not properly copying artifacts between stages',
+    ],
+    interviewerExpects: [
+      'Understanding of multi-stage build benefits',
+      'Knowledge of how to copy artifacts between stages',
+      'Security awareness about minimal images',
+    ],
+    followUpQuestions: [
+      'How does this affect build caching?',
+      'What is a distroless image?',
+      'How would you debug a multi-stage build?',
+    ],
+    keywords: ['multi-stage build', 'image optimization', 'build stage', 'production image', 'minimal image'],
+  },
+
+  // Docker - Advanced
+  {
+    id: 'docker-a-1',
+    moduleId: 'docker',
+    difficulty: 'advanced',
+    question: 'How does Docker implement container isolation at the kernel level?',
+    explanation: 'Docker uses Linux kernel features for isolation: Namespaces provide isolation (PID, Network, Mount, UTS, IPC, User namespaces). Cgroups (Control Groups) limit and account for resource usage (CPU, memory, I/O). Seccomp filters system calls. AppArmor/SELinux provide mandatory access control. Together, these create isolated environments without full virtualization.',
+    example: 'PID namespace: Container sees its process as PID 1, can\'t see host processes. Network namespace: Container has its own network stack. Cgroups: Limit container to 512MB RAM, container OOM-killed if exceeded.',
+    productionUseCase: 'When running untrusted workloads, companies use gVisor or Kata Containers which add additional isolation layers. Google\'s GKE uses gVisor for their Cloud Run service, providing VM-like isolation with container efficiency.',
+    commonMistakes: [
+      'Thinking containers provide VM-level isolation',
+      'Not understanding namespace limitations',
+      'Ignoring cgroup limits leading to resource contention',
+      'Running containers as root unnecessarily',
+    ],
+    interviewerExpects: [
+      'Deep understanding of Linux primitives',
+      'Knowledge of isolation limitations',
+      'Security awareness and hardening approaches',
+    ],
+    followUpQuestions: [
+      'What are the security implications of running as root?',
+      'How does rootless Docker improve security?',
+      'What is a container escape vulnerability?',
+    ],
+    keywords: ['namespaces', 'cgroups', 'seccomp', 'kernel isolation', 'container security', 'AppArmor', 'SELinux'],
+  },
+
+  // Docker - Troubleshooting
+  {
+    id: 'docker-t-1',
+    moduleId: 'docker',
+    difficulty: 'troubleshooting',
+    question: 'A container keeps restarting with "OOMKilled" status. How do you diagnose and fix this?',
+    explanation: 'OOMKilled means the container exceeded its memory limit and was killed by the OOM (Out of Memory) killer. Diagnose by: checking container logs, inspecting memory limits, monitoring actual memory usage. Fix by: increasing memory limit, fixing memory leaks, optimizing application memory usage, or using memory-efficient base images.',
+    example: 'docker inspect <container> | grep -i memory\ndocker stats <container>\ndocker logs <container>\n\nFix: docker run -m 1g ... or fix the application\'s memory leak.',
+    productionUseCase: 'A Java application was OOMKilled because JVM heap wasn\'t configured to respect container limits. Fix: Set -XX:MaxRAMPercentage=75.0 to limit JVM heap to 75% of container memory, leaving room for native memory.',
+    commonMistakes: [
+      'Setting container memory limit without configuring application limits',
+      'Not accounting for native memory in JVM containers',
+      'Ignoring swap settings',
+      'Not monitoring memory usage trends',
+    ],
+    interviewerExpects: [
+      'Systematic debugging approach',
+      'Understanding of memory limits and OOM behavior',
+      'Knowledge of application-specific memory tuning',
+    ],
+    followUpQuestions: [
+      'How do you configure JVM heap for containers?',
+      'What is the difference between memory limit and reservation?',
+      'How does Kubernetes handle OOMKilled pods?',
+    ],
+    keywords: ['OOMKilled', 'memory limit', 'OOM killer', 'docker stats', 'memory leak', 'resource limits'],
+  },
+
+  // Kubernetes - Beginner
+  {
+    id: 'k8s-b-1',
+    moduleId: 'kubernetes',
+    difficulty: 'beginner',
+    question: 'What is Kubernetes and what problems does it solve?',
+    explanation: 'Kubernetes (K8s) is a container orchestration platform that automates deployment, scaling, and management of containerized applications. It solves: manual scaling, service discovery, load balancing, self-healing (restarting failed containers), rolling updates, secret management, and infrastructure abstraction across cloud providers.',
+    example: 'Without K8s: Manually SSH to servers, pull images, start containers, configure nginx, handle failures. With K8s: Define desired state in YAML, K8s ensures your app runs as specified, automatically heals failures.',
+    productionUseCase: 'Airbnb manages thousands of microservices on Kubernetes. When a container fails at 3 AM, K8s automatically restarts it. When traffic increases, it scales pods. Engineers sleep while K8s maintains the desired state.',
+    commonMistakes: [
+      'Thinking K8s is just about running containers',
+      'Confusing Docker and Kubernetes responsibilities',
+      'Not understanding declarative vs imperative management',
+    ],
+    interviewerExpects: [
+      'Understanding of orchestration needs',
+      'Knowledge of key K8s features',
+      'Awareness of when K8s is appropriate (and when it\'s overkill)',
+    ],
+    followUpQuestions: [
+      'When would you NOT use Kubernetes?',
+      'What is the difference between Docker Swarm and Kubernetes?',
+      'What is meant by declarative configuration?',
+    ],
+    keywords: ['orchestration', 'container management', 'self-healing', 'scaling', 'declarative', 'desired state'],
+  },
+  {
+    id: 'k8s-b-2',
+    moduleId: 'kubernetes',
+    difficulty: 'beginner',
+    question: 'Explain the difference between a Pod, Deployment, and Service.',
+    explanation: 'Pod: Smallest deployable unit, contains one or more containers sharing network/storage—represents a single instance. Deployment: Manages Pod replicas, handles rolling updates and rollbacks—defines how many Pods should run. Service: Provides stable networking and load balancing to Pods—enables discovery and access regardless of Pod IP changes.',
+    example: 'Pod: One instance of your Node.js app. Deployment: "I want 3 replicas of this Pod running." Service: "Route traffic to healthy Pods on port 80, accessible as my-app.default.svc.cluster.local."',
+    productionUseCase: 'A typical production setup: Deployment manages 10 Pods of your API. Service provides a stable internal DNS name. When you update the image, Deployment performs rolling updates—replacing Pods one by one while Service continues routing to healthy ones.',
+    commonMistakes: [
+      'Creating Pods directly instead of using Deployments',
+      'Confusing Service with Ingress',
+      'Not understanding why Pods need Services for stable access',
+    ],
+    interviewerExpects: [
+      'Clear understanding of each resource\'s purpose',
+      'Knowledge of how they work together',
+      'Awareness of when to use each',
+    ],
+    followUpQuestions: [
+      'Why shouldn\'t you create Pods directly?',
+      'What types of Services are there?',
+      'What is a ReplicaSet?',
+    ],
+    keywords: ['Pod', 'Deployment', 'Service', 'ReplicaSet', 'rolling update', 'service discovery'],
+  },
+  {
+    id: 'k8s-b-3',
+    moduleId: 'kubernetes',
+    difficulty: 'beginner',
+    question: 'What is a Kubernetes namespace and why would you use it?',
+    explanation: 'A namespace is a virtual cluster within a Kubernetes cluster—a way to divide cluster resources between multiple users, teams, or environments. It provides scope for names (same resource names in different namespaces don\'t conflict), resource quotas, and access control via RBAC. Common use: separating dev, staging, and prod within one cluster.',
+    example: 'kubectl create namespace staging\nkubectl apply -f deployment.yaml -n staging\n\nResources in "staging" namespace are isolated from "production" namespace.',
+    productionUseCase: 'A company runs dev, staging, and production in separate namespaces with resource quotas: dev (2 CPU, 4GB), staging (4 CPU, 8GB), production (no limit). RBAC ensures developers can only access dev namespace.',
+    commonMistakes: [
+      'Not using namespaces for isolation',
+      'Forgetting that some resources are cluster-wide (nodes, persistent volumes)',
+      'Not setting resource quotas per namespace',
+    ],
+    interviewerExpects: [
+      'Understanding of namespace purpose and benefits',
+      'Knowledge of what can and cannot be namespaced',
+      'Awareness of RBAC and resource quotas',
+    ],
+    followUpQuestions: [
+      'What resources are NOT namespaced?',
+      'How do you communicate across namespaces?',
+      'What is a ResourceQuota?',
+    ],
+    keywords: ['namespace', 'isolation', 'multi-tenancy', 'RBAC', 'resource quota', 'virtual cluster'],
+  },
+
+  // Kubernetes - Intermediate
+  {
+    id: 'k8s-i-1',
+    moduleId: 'kubernetes',
+    difficulty: 'intermediate',
+    question: 'Explain Kubernetes networking: how do Pods communicate with each other?',
+    explanation: 'K8s networking follows key principles: Every Pod gets its own IP, Pods can communicate without NAT, nodes can communicate with Pods without NAT. The CNI (Container Network Interface) plugin implements this. Within a node, Pods communicate via virtual bridge. Across nodes, overlay networks (VXLAN) or direct routing. Services provide stable IPs and DNS.',
+    example: 'Pod A (10.244.1.5) on Node 1 calls Pod B (10.244.2.3) on Node 2. The CNI (e.g., Calico) routes the packet: Pod A → Node 1 network → Overlay/BGP → Node 2 network → Pod B.',
+    productionUseCase: 'Shopify uses Calico with BGP peering for their Kubernetes networking. Each node advertises its Pod CIDR via BGP to the network fabric, enabling direct routing without overlay overhead—improving performance for their high-throughput services.',
+    commonMistakes: [
+      'Confusing Pod IPs with Service IPs',
+      'Not understanding that Pod IPs are ephemeral',
+      'Assuming all CNIs work the same way',
+    ],
+    interviewerExpects: [
+      'Understanding of K8s networking model',
+      'Knowledge of CNI and how it works',
+      'Awareness of Service networking vs Pod networking',
+    ],
+    followUpQuestions: [
+      'What is kube-proxy and what does it do?',
+      'How does a Service route traffic to Pods?',
+      'What is a NetworkPolicy?',
+    ],
+    keywords: ['CNI', 'Pod networking', 'overlay network', 'kube-proxy', 'Service IP', 'cluster networking'],
+  },
+  {
+    id: 'k8s-i-2',
+    moduleId: 'kubernetes',
+    difficulty: 'intermediate',
+    question: 'What is a ConfigMap and Secret? How are they different?',
+    explanation: 'Both inject configuration into Pods. ConfigMap stores non-sensitive data (config files, environment variables). Secret stores sensitive data (passwords, API keys, certificates) with base64 encoding (not encryption by default). Both can be mounted as volumes or exposed as environment variables. Secrets have additional protections: RBAC, at-rest encryption option.',
+    example: 'ConfigMap: Database host, feature flags, config.json. Secret: Database password, API keys, TLS certificates. Both injected via env vars or volume mounts.',
+    productionUseCase: 'A production setup uses ConfigMap for application config (LOG_LEVEL=info, FEATURE_X=enabled), Secret for credentials (DB_PASSWORD), external secret management (Vault) for highly sensitive data with automatic rotation.',
+    commonMistakes: [
+      'Thinking Secrets are encrypted (they\'re base64 encoded by default)',
+      'Storing secrets in ConfigMaps',
+      'Not enabling encryption at rest for Secrets',
+      'Hardcoding config in container images',
+    ],
+    interviewerExpects: [
+      'Clear distinction between ConfigMap and Secret',
+      'Understanding of security implications',
+      'Knowledge of how to use both in Pods',
+    ],
+    followUpQuestions: [
+      'How do you encrypt Secrets at rest?',
+      'What is External Secrets Operator?',
+      'How do you mount a ConfigMap as a file?',
+    ],
+    keywords: ['ConfigMap', 'Secret', 'environment variables', 'volume mount', 'encryption at rest', 'RBAC'],
+  },
+
+  // Kubernetes - Scenario
+  {
+    id: 'k8s-s-1',
+    moduleId: 'kubernetes',
+    difficulty: 'scenario',
+    question: 'Your Deployment rollout is stuck with Pods in "ImagePullBackOff" state. How do you troubleshoot?',
+    explanation: 'ImagePullBackOff means K8s cannot pull the container image. Debug steps: 1) Check Pod events for specific error 2) Verify image name and tag exist 3) Check registry authentication (imagePullSecrets) 4) Verify network connectivity to registry 5) Check for rate limiting (Docker Hub). Fix by correcting image reference or adding proper credentials.',
+    example: 'kubectl describe pod <pod-name> → Shows "Failed to pull image: unauthorized"\nkubectl get secret regcred -o yaml → Check imagePullSecret exists\n\nFix: Create/update imagePullSecret with correct registry credentials.',
+    productionUseCase: 'A deployment failed at 2 AM because Docker Hub rate limited the cluster\'s pull requests. Solution: Moved to a private registry (ECR) with IAM authentication, implemented image caching with a pull-through proxy, and pre-pulled critical images to nodes.',
+    commonMistakes: [
+      'Not checking events for the actual error',
+      'Forgetting imagePullSecrets for private registries',
+      'Using :latest tag which might not exist',
+      'Not considering registry rate limits',
+    ],
+    interviewerExpects: [
+      'Systematic debugging approach',
+      'Knowledge of kubectl describe for debugging',
+      'Understanding of image pull secrets',
+    ],
+    followUpQuestions: [
+      'How do you create an imagePullSecret?',
+      'What is the difference between ErrImagePull and ImagePullBackOff?',
+      'How would you cache images locally?',
+    ],
+    keywords: ['ImagePullBackOff', 'imagePullSecrets', 'registry authentication', 'kubectl describe', 'image pull'],
+  },
+
+  // AWS - Beginner
+  {
+    id: 'aws-b-1',
+    moduleId: 'aws',
+    difficulty: 'beginner',
+    question: 'What is the difference between EC2, Lambda, and ECS?',
+    explanation: 'EC2 provides virtual servers—you manage OS, scaling, patching. Lambda is serverless compute—upload code, it runs on events, pay per execution, no server management. ECS is container orchestration—runs Docker containers, you define tasks, AWS manages placement. Choose based on control needs, cost model, and workload characteristics.',
+    example: 'EC2: Legacy app requiring specific OS configuration. Lambda: Process S3 uploads, run for <15 min, sporadic traffic. ECS: Microservices architecture with Docker containers needing orchestration.',
+    productionUseCase: 'Netflix uses EC2 for their encoding fleet (predictable, long-running), Lambda for their image processing (event-driven, sporadic), and ECS for their microservices (containerized, needs orchestration).',
+    commonMistakes: [
+      'Using EC2 for everything when Lambda would be more cost-effective',
+      'Not understanding Lambda cold starts and timeout limits',
+      'Confusing ECS with EKS (Kubernetes)',
+    ],
+    interviewerExpects: [
+      'Understanding of different compute models',
+      'Knowledge of when to use each service',
+      'Cost and operational trade-off awareness',
+    ],
+    followUpQuestions: [
+      'When would Lambda be inappropriate?',
+      'What is the difference between ECS and EKS?',
+      'How do you choose between Fargate and EC2 launch types in ECS?',
+    ],
+    keywords: ['EC2', 'Lambda', 'ECS', 'serverless', 'compute', 'containers', 'virtual machines'],
+  },
+  {
+    id: 'aws-b-2',
+    moduleId: 'aws',
+    difficulty: 'beginner',
+    question: 'Explain the difference between S3 storage classes.',
+    explanation: 'S3 offers storage classes optimized for different access patterns and costs. Standard: Frequent access, highest cost. Intelligent-Tiering: Auto-moves data based on access. Standard-IA: Infrequent access, lower storage cost, retrieval fee. One Zone-IA: Single AZ, lower cost. Glacier: Archive, minutes to hours retrieval. Glacier Deep Archive: Cheapest, 12+ hour retrieval.',
+    example: 'Active user uploads: S3 Standard. Old user data: S3 Standard-IA. Legal archives (7-year retention): Glacier. Ancient backups (rarely needed): Glacier Deep Archive.',
+    productionUseCase: 'A company uses Lifecycle policies: Day 0-30 in Standard, Day 30-90 in Standard-IA, Day 90+ in Glacier. This reduced storage costs by 60% while maintaining compliance requirements.',
+    commonMistakes: [
+      'Using Standard for everything (wasting money)',
+      'Not considering retrieval costs for IA classes',
+      'Forgetting minimum storage duration charges',
+      'Not using Lifecycle policies for automation',
+    ],
+    interviewerExpects: [
+      'Knowledge of different storage classes',
+      'Understanding of cost optimization',
+      'Awareness of Lifecycle policies',
+    ],
+    followUpQuestions: [
+      'How do S3 Lifecycle policies work?',
+      'What is S3 Intelligent-Tiering and when would you use it?',
+      'How long does Glacier Deep Archive retrieval take?',
+    ],
+    keywords: ['S3', 'storage classes', 'Glacier', 'Standard-IA', 'Lifecycle policies', 'cost optimization'],
+  },
+
+  // AWS - Intermediate
+  {
+    id: 'aws-i-1',
+    moduleId: 'aws',
+    difficulty: 'intermediate',
+    question: 'How does IAM work in AWS? Explain users, roles, and policies.',
+    explanation: 'IAM (Identity and Access Management) controls who can do what in AWS. Users: Long-term credentials for people. Roles: Temporary credentials for services/cross-account access. Policies: JSON documents defining permissions (Effect, Action, Resource, Condition). Policies attach to users, groups, or roles. Always use least privilege.',
+    example: 'User: Developer with console access. Role: EC2 instance accessing S3 (instance profile). Policy: Allow s3:GetObject on arn:aws:s3:::mybucket/*.',
+    productionUseCase: 'An application on EC2 needs to access S3. Instead of embedding access keys (security risk), attach an IAM role to the instance. The role has a policy allowing only S3 read access to specific buckets. Credentials auto-rotate.',
+    commonMistakes: [
+      'Using root account or long-term keys',
+      'Over-permissive policies (Action: *, Resource: *)',
+      'Not using roles for EC2/Lambda',
+      'Embedding credentials in code',
+    ],
+    interviewerExpects: [
+      'Understanding of IAM principals and policies',
+      'Knowledge of when to use users vs roles',
+      'Security best practices awareness',
+    ],
+    followUpQuestions: [
+      'What is the difference between identity-based and resource-based policies?',
+      'How do you implement cross-account access?',
+      'What is an IAM permission boundary?',
+    ],
+    keywords: ['IAM', 'users', 'roles', 'policies', 'least privilege', 'instance profile', 'STS'],
+  },
+
+  // Linux - Beginner
+  {
+    id: 'linux-b-1',
+    moduleId: 'linux',
+    difficulty: 'beginner',
+    question: 'What is the difference between hard links and soft links?',
+    explanation: 'Hard link: Another name for the same inode (file data). Deleting original doesn\'t affect hard link. Cannot span filesystems, cannot link directories. Soft link (symlink): Pointer to file path, like a shortcut. Deleting original breaks the symlink. Can span filesystems, can link directories.',
+    example: 'Hard link: ln file1 file2 (both point to same inode). Soft link: ln -s file1 file2 (file2 points to file1\'s path). Delete file1: hard link still works, soft link breaks.',
+    productionUseCase: 'Deployment systems often use symlinks for zero-downtime deployments: /var/www/current → /var/www/releases/v2.0. New deployment: update symlink to v2.1. Instant cutover, easy rollback.',
+    commonMistakes: [
+      'Confusing inode sharing in hard links',
+      'Not understanding that symlinks can break',
+      'Forgetting hard links can\'t cross filesystems',
+    ],
+    interviewerExpects: [
+      'Clear distinction between both link types',
+      'Understanding of inodes',
+      'Practical use cases for each',
+    ],
+    followUpQuestions: [
+      'What happens to a hard link when the original is deleted?',
+      'How can you tell if two files share the same inode?',
+      'Can you create a hard link to a directory?',
+    ],
+    keywords: ['hard link', 'soft link', 'symlink', 'inode', 'ln', 'filesystem'],
+  },
+  {
+    id: 'linux-b-2',
+    moduleId: 'linux',
+    difficulty: 'beginner',
+    question: 'Explain Linux file permissions: read, write, execute for user, group, others.',
+    explanation: 'Linux files have three permission sets: user (owner), group, others. Each set has read (r=4), write (w=2), execute (x=1). Displayed as rwxrwxrwx or numeric (e.g., 755). For directories: read=list contents, write=create/delete files, execute=access/traverse.',
+    example: '-rwxr-xr-- means: user can rwx (7), group can rx (5), others can r (4). Numeric: 754. Command: chmod 754 file.sh.',
+    productionUseCase: 'Web servers typically run as www-data user. Application code: 644 (owner write, others read). Directories: 755 (traversable). Secrets: 600 (only owner can read). Executables: 755.',
+    commonMistakes: [
+      'Using 777 permissions (security risk)',
+      'Not understanding execute on directories',
+      'Forgetting about the special permissions (setuid, setgid, sticky)',
+    ],
+    interviewerExpects: [
+      'Understanding of permission bits',
+      'Knowledge of numeric and symbolic notation',
+      'Security awareness',
+    ],
+    followUpQuestions: [
+      'What is the sticky bit and when is it used?',
+      'What is setuid and why is it dangerous?',
+      'How do you recursively change permissions?',
+    ],
+    keywords: ['permissions', 'chmod', 'rwx', 'user', 'group', 'others', 'octal notation'],
+  },
+
+  // Linux - Troubleshooting
+  {
+    id: 'linux-t-1',
+    moduleId: 'linux',
+    difficulty: 'troubleshooting',
+    question: 'A server is running slowly and CPU usage is at 100%. How do you diagnose and resolve?',
+    explanation: 'Diagnose with: top/htop (see processes), identify culprit process, check if legitimate workload or runaway process. Investigate: strace for syscalls, logs for errors, check for infinite loops, memory thrashing. Resolve: kill runaway process, optimize code, scale resources, or implement rate limiting.',
+    example: 'top shows java process at 300% CPU. strace -p <pid> shows repeated failed network calls. Logs show connection timeout to database. Fix: database was down, restart database, add connection timeout handling.',
+    productionUseCase: 'At 3 AM, alerts fired for high CPU. top showed a cron job parsing a massive log file inefficiently. Short-term: killed the process. Long-term: rewrote the script using awk instead of nested loops, reducing CPU time from 2 hours to 3 minutes.',
+    commonMistakes: [
+      'Killing processes without understanding why',
+      'Not checking logs first',
+      'Ignoring the difference between user and system CPU time',
+      'Not considering if high CPU is actually a problem (might be expected)',
+    ],
+    interviewerExpects: [
+      'Systematic debugging approach',
+      'Knowledge of diagnostic tools',
+      'Understanding of CPU metrics',
+    ],
+    followUpQuestions: [
+      'What\'s the difference between %us and %sy in top?',
+      'How do you profile a process to find hot spots?',
+      'What is load average and how does it differ from CPU usage?',
+    ],
+    keywords: ['top', 'htop', 'CPU usage', 'strace', 'process troubleshooting', 'load average'],
+  },
+
+  // Terraform - Beginner
+  {
+    id: 'tf-b-1',
+    moduleId: 'terraform',
+    difficulty: 'beginner',
+    question: 'What is Terraform and what is Infrastructure as Code?',
+    explanation: 'Terraform is an IaC tool that lets you define cloud infrastructure in declarative configuration files. Instead of clicking in AWS console, you write code describing desired state. Terraform compares current state with desired state and makes necessary changes. Benefits: version control, repeatability, collaboration, automation, drift detection.',
+    example: 'resource "aws_instance" "web" {\n  ami           = "ami-0c55b159cbfafe1f0"\n  instance_type = "t2.micro"\n}\n\nterraform apply → Creates the EC2 instance.',
+    productionUseCase: 'A company manages 500+ AWS resources. Without IaC: manual, error-prone, no audit trail. With Terraform: entire infrastructure in Git, peer-reviewed changes, automated deployment, consistent environments (dev matches prod).',
+    commonMistakes: [
+      'Confusing Terraform with configuration management (Ansible)',
+      'Not version controlling Terraform code',
+      'Applying without reviewing the plan',
+      'Not understanding state file importance',
+    ],
+    interviewerExpects: [
+      'Understanding of IaC benefits',
+      'Knowledge of declarative vs imperative',
+      'Awareness of Terraform workflow',
+    ],
+    followUpQuestions: [
+      'What is the difference between Terraform and Ansible?',
+      'What is a Terraform provider?',
+      'What is the purpose of terraform plan?',
+    ],
+    keywords: ['Infrastructure as Code', 'IaC', 'Terraform', 'declarative', 'state', 'provider'],
+  },
+  {
+    id: 'tf-b-2',
+    moduleId: 'terraform',
+    difficulty: 'beginner',
+    question: 'Explain the Terraform workflow: init, plan, apply.',
+    explanation: 'terraform init: Initialize directory, download providers and modules. Run once or when providers change. terraform plan: Preview changes without applying. Shows what will be created, modified, or destroyed. terraform apply: Execute the plan, make actual infrastructure changes. Also terraform destroy to tear down.',
+    example: 'terraform init → Downloads AWS provider\nterraform plan → Shows: 1 to add, 0 to change, 0 to destroy\nterraform apply → Creates resources, updates state file',
+    productionUseCase: 'CI/CD pipeline: PR triggers terraform plan → output shown in PR for review. Merge triggers terraform apply. Manual approval gate before production. State stored remotely in S3 with locking via DynamoDB.',
+    commonMistakes: [
+      'Running apply without reviewing plan',
+      'Not running init after adding providers',
+      'Forgetting about state locking in team environments',
+      'Running apply locally in production',
+    ],
+    interviewerExpects: [
+      'Understanding of each command\'s purpose',
+      'Knowledge of safe workflow practices',
+      'Awareness of CI/CD integration',
+    ],
+    followUpQuestions: [
+      'What happens if you don\'t run terraform init?',
+      'How do you target specific resources?',
+      'What is terraform refresh?',
+    ],
+    keywords: ['terraform init', 'terraform plan', 'terraform apply', 'workflow', 'state file'],
+  },
+
+  // Terraform - Intermediate
+  {
+    id: 'tf-i-1',
+    moduleId: 'terraform',
+    difficulty: 'intermediate',
+    question: 'What is Terraform state and why is remote state important?',
+    explanation: 'Terraform state is a JSON file mapping your configuration to real-world resources. It tracks resource IDs, dependencies, and metadata. Remote state (S3, Terraform Cloud) enables: team collaboration, state locking (prevent concurrent modifications), security (state may contain secrets), backup/versioning. Never commit state to Git.',
+    example: 'terraform {\n  backend "s3" {\n    bucket         = "my-terraform-state"\n    key            = "prod/terraform.tfstate"\n    region         = "us-east-1"\n    dynamodb_table = "terraform-locks"\n    encrypt        = true\n  }\n}',
+    productionUseCase: 'Without remote state: two engineers run apply simultaneously, corrupting state. With remote state + DynamoDB locking: second engineer gets "state locked" error, preventing corruption. State encrypted at rest, versioned for recovery.',
+    commonMistakes: [
+      'Committing state files to Git (exposes secrets)',
+      'Not enabling state locking',
+      'Not encrypting remote state',
+      'Manually editing state files',
+    ],
+    interviewerExpects: [
+      'Understanding of state purpose',
+      'Knowledge of remote backends',
+      'Security and collaboration awareness',
+    ],
+    followUpQuestions: [
+      'What happens if you lose your state file?',
+      'How do you move resources between states?',
+      'What is state locking and why is it important?',
+    ],
+    keywords: ['state file', 'remote state', 'S3 backend', 'state locking', 'DynamoDB', 'terraform state'],
+  },
+
+  // Security - Beginner
+  {
+    id: 'sec-b-1',
+    moduleId: 'security',
+    difficulty: 'beginner',
+    question: 'What is the principle of least privilege and how do you implement it?',
+    explanation: 'Least privilege means granting only the minimum permissions needed to perform a task—no more. If a user needs to read S3, don\'t give full S3 access or all AWS access. Implement via: specific IAM policies, scoped resource ARNs, regular permission audits, time-limited access, assume-role for temporary elevation.',
+    example: 'Bad: "Action": "*", "Resource": "*"\nGood: "Action": ["s3:GetObject"], "Resource": "arn:aws:s3:::mybucket/path/*"',
+    productionUseCase: 'Instead of giving developers full AWS access: Developers get read-only access to dev accounts, PRs for Terraform changes, assume-role for temporary prod access with logging. This contained a credential leak to dev resources only.',
+    commonMistakes: [
+      'Starting with full access and never restricting',
+      'Using wildcards for convenience',
+      'Not auditing existing permissions',
+      'Sharing credentials between users/services',
+    ],
+    interviewerExpects: [
+      'Clear understanding of the principle',
+      'Practical implementation approaches',
+      'Examples of violations and consequences',
+    ],
+    followUpQuestions: [
+      'How do you audit existing permissions?',
+      'What AWS tools help implement least privilege?',
+      'How do you handle break-glass scenarios?',
+    ],
+    keywords: ['least privilege', 'IAM', 'permissions', 'access control', 'security principle', 'RBAC'],
+  },
+
+  // Monitoring - Beginner
+  {
+    id: 'mon-b-1',
+    moduleId: 'monitoring',
+    difficulty: 'beginner',
+    question: 'What is the difference between monitoring, logging, and tracing?',
+    explanation: 'Monitoring: Collect and analyze metrics (CPU, memory, request rate) to understand system health. Aggregated data, time-series. Logging: Record discrete events (errors, transactions) for debugging. Individual records, searchable. Tracing: Track requests across services to understand latency and failures. Distributed context propagation.',
+    example: 'Monitoring: "API latency p99 is 500ms" (Prometheus/Grafana). Logging: "Error: DB connection failed at 14:32:01" (ELK). Tracing: "Request took 2s: 100ms in API, 1900ms in database" (Jaeger).',
+    productionUseCase: 'Alert fires: "API latency high" (monitoring). Check traces: slow requests all hitting product service (tracing). Search logs: "product service OOM errors at 14:30" (logging). Root cause: memory leak deployed at 14:00.',
+    commonMistakes: [
+      'Only implementing one pillar',
+      'Logging too much or too little',
+      'Not correlating data across pillars',
+      'Alerting on symptoms not causes',
+    ],
+    interviewerExpects: [
+      'Understanding of all three pillars',
+      'Knowledge of common tools for each',
+      'How they work together for debugging',
+    ],
+    followUpQuestions: [
+      'What are the four golden signals?',
+      'How do you correlate logs with traces?',
+      'What is the difference between black-box and white-box monitoring?',
+    ],
+    keywords: ['monitoring', 'logging', 'tracing', 'observability', 'metrics', 'Prometheus', 'ELK', 'Jaeger'],
+  },
+
+  // Networking - Beginner
+  {
+    id: 'net-b-1',
+    moduleId: 'networking',
+    difficulty: 'beginner',
+    question: 'What is the difference between TCP and UDP?',
+    explanation: 'TCP (Transmission Control Protocol): Connection-oriented, reliable, ordered delivery, flow control, slower. Uses handshake, acknowledgments, retransmission. UDP (User Datagram Protocol): Connectionless, unreliable, no ordering guarantee, no flow control, faster. Fire-and-forget.',
+    example: 'TCP: Web browsing, file transfer, email—need every byte, order matters. UDP: Video streaming, gaming, DNS—speed matters, some loss acceptable.',
+    productionUseCase: 'Video conferencing uses UDP: dropped frames are preferable to delayed frames. Your bank uses TCP: you need every transaction to arrive, in order, confirmed. DNS uses UDP for queries (speed) but TCP for zone transfers (reliability).',
+    commonMistakes: [
+      'Saying UDP is "unreliable" negatively—it\'s a design choice',
+      'Not knowing when to use each',
+      'Forgetting about the three-way handshake',
+    ],
+    interviewerExpects: [
+      'Clear distinction between both protocols',
+      'Use case examples for each',
+      'Understanding of trade-offs',
+    ],
+    followUpQuestions: [
+      'Explain the TCP three-way handshake.',
+      'Why is UDP used for DNS?',
+      'What is QUIC and how does it relate?',
+    ],
+    keywords: ['TCP', 'UDP', 'connection-oriented', 'connectionless', 'reliable', 'handshake', 'protocol'],
+  },
+];
